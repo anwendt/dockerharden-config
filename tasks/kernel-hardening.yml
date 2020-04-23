@@ -1,0 +1,33 @@
+
+- hosts: "localhost"
+  tasks:
+  - sysctl:
+      name: net.ipv4.tcp_keepalive_probes
+      value: '5'
+      state: present
+  - sysctl:
+      name: net.ipv4.tcp_keepalive_intvl
+      value: '50'
+      state: present
+  - sysctl:
+      name: net.ipv4.tcp_keepalive_time
+      value: '600'
+      state: present
+  - sysctl:
+      name: vm.overcommit_memory
+      value: '1'
+      state: present
+  - sysctl:
+      name: kernel.panic
+      value: '10'
+      state: present
+  - sysctl:
+      name: kernel.panic_on_oops
+      value: '1'
+      state: present
+      reload: yes
+  - sysctl:
+      name: vm.max_map_count
+      value: '262144'
+      state: present
+      reload: yes

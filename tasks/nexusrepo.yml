@@ -1,0 +1,69 @@
+- hosts: "localhost"
+  vars:
+    nexus_repo: https://nexus.aocs-int.t-systems-service.com/repository/centos
+    openlogic_repo: https://nexus.aocs-int.t-systems-service.com/repository/openlogic
+    cloud: "{{ lookup('env', 'cloud') | lower }}"
+  tasks:
+    - name: Disable existing CentOS base Repo
+      shell:  "yum-config-manager --disable base"
+      when: cloud == "azure"
+    - name: Disable existing CentOS extra Repo
+      shell:  "yum-config-manager --disable extras"
+      when: cloud == "azure"
+    - name: Disable existing CentOS extra Repo
+      shell:  "yum-config-manager --disable updates"
+      when: cloud == "azure"
+    - name: Disable existing CentOS extra Repo
+      shell:  "yum-config-manager --disable epel"
+      when: cloud == "azure"
+    - name: Disable existing CentOS extra Repo
+      shell:  "yum-config-manager --disable epel"
+      when: cloud == "azure"
+    - name: Disable existing CentOS extra Repo
+      shell:  "yum-config-manager --disable openlogic"
+      when: cloud == "azure"
+    - name: Add Nexus CentOS Base
+      yum_repository:
+        name: HCCS-CentOS-Base
+        description: CentOS Base Services
+        baseurl: "{{ nexus_repo }}/$releasever/os/$basearch/"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+      when: cloud == "azure"
+    - name: Add Nexus CentOS Updates
+      yum_repository:
+        name: HCCS-CentOS-Updates
+        description: CentOS Updates
+        baseurl: "{{ nexus_repo }}/$releasever/updates/$basearch/"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+      when: cloud == "azure"
+    - name: Add Nexus CentOS Extras
+      yum_repository:
+        name: HCCS-CentOS-Extras
+        description: CentOS Extras
+        baseurl: "{{ nexus_repo }}/$releasever/extras/$basearch/"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+      when: cloud == "azure"
+    - name: Add Nexus CentOS Plus
+      yum_repository:
+        name: HCCS-CentOS-Plus
+        description: CentOS Plus
+        baseurl: "{{ nexus_repo }}/$releasever/centosplus/$basearch/"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+      when: cloud == "azure"
+    - name: Add Openlogic Repo
+      yum_repository:
+        name: HCCS-openlogic
+        description: Openlogic packgaes
+        baseurl: "{{ openlogic_repo }}/$releasever/openlogic/$basearch/"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "{{ openlogic_repo }}/$releasever/openlogic/$basearch/OpenLogic-GPG-KEY"
+      when: cloud == "azure"

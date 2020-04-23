@@ -1,0 +1,141 @@
+##########################################################################
+# (c) T-Systems International GmbH
+# Auhtor: Andres Wendt (andres-martin.wendt@t-systems.com)
+# Purpose:
+# This will be used to install a hardened version of docker on given system.
+# by using ansible. Harding will be based on CIS controls. Ansible code is
+# inspired from https://github.com/mitre/ansible-cis-docker-ce-hardening
+#
+##########################################################################
+# Input Parameter:
+# all innput parameters will be set via environment varaiables
+#
+# Ouput Parameter
+#
+#
+# additional files:
+#
+# needed providers
+#
+# Function:
+#  - remove existing docker installation wich comes from os images
+#  - install docker by using the docker-ce version
+#  - hardeing docker by using CIS controls
+#
+##########################################################################
+# Addtional information and references:
+#   https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/centos/
+#   https://www.cisecurity.org/benchmark/docker/
+##########################################################################
+---
+- hosts: "localhost"
+  vars:
+    - users:
+      - "{{ lookup('env', 'adminuser') | default('aocsadm',true) }}"
+    - docker_version:
+        "{{ lookup('env', 'docker_version') | default('18.09.9',true) }}"
+    - docker_repo: 
+        "{{ lookup('env', 'docker_yum_repo') | default('https://nexus.aocs-int.t-systems-service.com/repository/docker-ce',true) }}"
+    - section_1: true
+    - section_2: true
+    - section_3: true
+    - section_4: true
+    - section_5: true
+      # section_6: false
+    - config_file: /etc/docker/daemon.json
+    - dockerd_via_network: true
+    - dockerd_via_network_secured: false
+      # Provide the following arguments if dockerd_via_network is true
+      # Generate CA cert and CA Key and place it in the files directory
+    - dockerd_ip: 0.0.0.0
+    - dockerd_port: 2376
+    - ca_cert: ca.pem
+    - ca_key: ca-key.pem
+    - ca_key_passphrase: changeme
+    - host_ip: 0.0.0.0
+    - server_cert_path: /etc/docker/tls/server_certs
+    - server_cert: server-cert.pem
+    - server_cert_key: server-key.pem
+    - client_cert_path: /etc/docker/tls/client_certs
+    - client_cert: cert.pem
+    - client_cert_key: key.pem
+    - default_ulimits_nofile_soft: 65536
+    - default_ulimits_nofile_hard: 65536
+    - default_ulimits_nproc_soft: 4096
+    - default_ulimits_nproc_hard: 16384
+    - syslog_address: ''
+    - seccomp_profile: ''
+    - authorization_plugins: []
+    - hardening: false
+
+  tasks:
+    - name: Remove docker if installed from CentOS repo
+      package:
+        name:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: removed
+    - name: Install yum utils
+      package:
+        name: yum-utils
+        state: latest
+    - name: Install device-mapper-persistent-data
+      package:
+        name: device-mapper-persistent-data
+        state: latest
+    - name: Install lvm2
+      package:
+        name: lvm2
+        state: latest
+    - name: Add Docker repository
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: "{{ docker_repo }}/7/$basearch/stable"
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: "{{ docker_repo }}/gpg"
+    - name: Install Docker
+      package:
+        name: 
+          - docker-ce-{{ docker_version }}
+          - docker-ce-cli-{{ docker_version }}
+          - containerd.io
+        state: present
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Add admin user to docker group
+      user:
+        name: "{{ item }}"
+        groups: docker
+        append: yes
+      with_items: "{{ users }}"
+    - name: Docker hardening level 1
+      import_tasks: docker-level1.yml
+      when: hardening
+    - name: Docker hardening level 2
+      import_tasks: docker-level2.yml
+      when: hardening
+    - name: Docker hardening level 3
+      import_tasks: docker-level3.yml
+      when: hardening
+    - name: Docker hardening level 4
+      import_tasks: docker-level4.yml
+      when: hardening
+    - name: Docker hardening level 5
+      import_tasks: docker-level5.yml
+      when: hardening
+  handlers:
+  - name: Reload auditd Rules
+    command: service auditd restart
+  - name: Reload docker
+    command: service docker restart
