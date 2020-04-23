@@ -1,0 +1,45 @@
+---
+- hosts: "localhost"
+  vars:
+    default_device_list_docker: [ "sdb","vdb","xvdb" ]
+    device_list_docker: "{{ lookup('env', 'device_list_docker') | default(default_device_list_docker,true) }}"
+    etcd_device : ""
+    docker_device : ""
+
+  tasks:
+  - name: test device name docker
+    stat:
+      path: "/dev/{{ item }}"
+    with_items: "{{ device_list_docker }}"
+    register: check_dockerdev
+
+  - name: Set docker device name
+    set_fact:
+      "docker_device" : "{{ item.stat.path }}"
+    with_items: "{{ check_dockerdev.results }}"
+    when: item.stat.exists 
+
+  - name: Nachrichten 
+    debug: msg="docker device name is {{ docker_device }}"
+
+  - name: Stop Service
+    service: name=docker state=stopped
+    ignore_errors: yes
+
+  - name: Create a ext4 filesystem for docker
+    filesystem:
+      fstype: ext4
+      dev: "{{ docker_device }}"
+  - name: Prepare directory for docker
+    file:
+      path: /var/lib/docker
+      state: directory
+      owner: root
+      group: root
+  - name: Set docker mount to fstab and mount directory 
+    mount:
+      path: /var/lib/docker
+      src: "{{ docker_device }}"
+      opts: defaults
+      state: mounted
+      fstype: ext4

@@ -1,0 +1,32 @@
+##########################################################################
+# (c) T-Systems International GmbH
+# Auhtor: Andres Wendt (andres-martin.wendt@t-systems.com)
+# Purpose:
+# This will be used to register custom node to rancher server
+#
+##########################################################################
+# Input Parameter:
+#
+# Ouput Parameter
+#
+#
+# additional files:
+#
+# needed providers
+#
+# Function:
+#
+##########################################################################
+# Addtional information and references:
+#   
+##########################################################################
+
+- hosts: "localhost"
+  vars:
+    rancher_node_command: "{{ lookup('env', 'rancher_node_command') }}"
+    cloud: "{{ lookup('env', 'cloud') }}"
+    k8shostname: "{{ lookup('env', 'CATTLE_NODE_NAME') }}"
+
+  tasks:
+  - name: Register 2 Rancher
+    shell:  "{{ rancher_node_command }} --worker --label cloud={{ cloud }} --node-name {{ k8shostname }}"

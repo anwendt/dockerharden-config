@@ -30,8 +30,6 @@
 ---
 - hosts: "localhost"
   vars:
-    - users:
-      - "{{ lookup('env', 'adminuser') | default('aocsadm',true) }}"
     - docker_version:
         "{{ lookup('env', 'docker_version') | default('18.09.9',true) }}"
     - docker_repo: 
@@ -44,7 +42,6 @@
       # section_6: false
     - config_file: /etc/docker/daemon.json
     - dockerd_via_network: false
-    - dockerd_via_network_secured: false
       # Provide the following arguments if dockerd_via_network is true
       # Generate CA cert and CA Key and place it in the files directory
     - dockerd_ip: 0.0.0.0
@@ -66,7 +63,7 @@
     - syslog_address: ''
     - seccomp_profile: ''
     - authorization_plugins: []
-    - hardening: false
+    - hardening: true
 
   tasks:
     - name: Remove docker if installed from CentOS repo
@@ -113,12 +110,6 @@
         name: docker
         state: started
         enabled: yes
-    - name: Add admin user to docker group
-      user:
-        name: "{{ item }}"
-        groups: docker
-        append: yes
-      with_items: "{{ users }}"
     - name: Docker hardening level 1
       import_tasks: docker-level1.yml
       when: hardening

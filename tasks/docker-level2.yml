@@ -112,7 +112,7 @@
         key: tlskey
         value: "{{ server_cert_path }}/{{ server_cert_key }}"
       notify: Reload docker
-  when: dockerd_via_network_secured
+  when: dockerd_via_network
   tags:
    - scored
    - section2.6
@@ -268,15 +268,3 @@
 #  tags:
 #   - scored
 #   - section2.18
-
-- name: Set ENV Vars
-  lineinfile:
-    path: /etc/systemd/system/docker.service.d/startup_options.conf
-    create: yes
-    line: "{{ item }}"
-  with_items:
-    - "[Service]"
-    - "ExecStart="
-    - "ExecStart=/usr/bin/dockerd -H fd:// -H {{ dockerd_ip }}:{{ dockerd_port }}"
-  notify: Reload docker
-  when: dockerd_via_network | bool
