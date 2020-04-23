@@ -1,5 +1,5 @@
 ---
 - import_playbook: tasks/nexusrepo.yml
-# - import_playbook: tasks/firewall.yml
+- import_playbook: tasks/firewall.yml
 - import_playbook: tasks/kernel-hardening.yml
 - import_playbook: tasks/docker.yml
