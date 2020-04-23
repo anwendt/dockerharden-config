@@ -43,7 +43,7 @@
     - section_5: true
       # section_6: false
     - config_file: /etc/docker/daemon.json
-    - dockerd_via_network: true
+    - dockerd_via_network: false
     - dockerd_via_network_secured: false
       # Provide the following arguments if dockerd_via_network is true
       # Generate CA cert and CA Key and place it in the files directory
