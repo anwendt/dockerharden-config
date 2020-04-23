@@ -43,14 +43,6 @@
    - not_scored
    - section1.3
 
-- name: 1.4 Ensure only trusted users are allowed to control Docker daemon (Scored)
-  user:
-    name: "{{ item }}"
-    group: docker 
-  with_items: "{{ users }}"
-  tags:
-   - scored
-   - section1.4
 
 - name: 1.5 Ensure auditing is configured for the docker daemon (Scored)
   lineinfile: 
