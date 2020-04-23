@@ -1,8 +1,5 @@
 ---
-- import_playbook: tasks/prepfs.yml
-- import_playbook: tasks/adminuser.yml
 - import_playbook: tasks/nexusrepo.yml
 - import_playbook: tasks/firewall.yml
 - import_playbook: tasks/kernel-hardening.yml
 - import_playbook: tasks/docker.yml
-- import_playbook: tasks/register2rancher.yml
