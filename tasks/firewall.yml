@@ -27,25 +27,36 @@
 #   https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/centos/
 #   https://www.cisecurity.org/benchmark/docker/
 ##########################################################################
+
+
 - hosts: "localhost"
   tasks:
   - name: Install firewalld
     package: name={{ item }} state=latest
     with_items:
-    - firewalld
-    - ipset
+      - firewalld
+      - ipset
 
   - name: start firewalld
     service: name=firewalld state=started enabled=yes
 
-  - name: configure firewall workder nodes
+  - name: configure firwall open etcd ports
     command: firewall-cmd --permanent --add-port={{ item }}
     with_items:
-      - 22/tcp
+      - 2376/tcp
+      - 2379/tcp
+      - 2380/tcp
+      - 8472/udp
+      - 9099/tcp
+      - 10250/tcp
+
+  - name: configure firewall open controlplane and worker nodes
+    command: firewall-cmd --permanent --add-port={{ item }}
+    with_items:
       - 80/tcp
       - 443/tcp
       - 2376/tcp
-      - 2379/tcp
+      - 6443/tcp
       - 8472/udp
       - 9099/tcp
       - 10250/tcp
