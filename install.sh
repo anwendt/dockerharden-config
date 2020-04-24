@@ -397,7 +397,7 @@ do_install() {
                                         done
                     fi
 			        if [ "$lsb_dist" = "centos" ]; then
-						yum install -y ansible git at
+						yum install -y ansible git at openssl
                         printf "[local]\n127.0.0.1 ansible_connection=local\n" > /etc/ansible/hosts
                         ansible-pull --purge -U https://github.com/anwendt/dockerharden-config.git -d /opt/aocs/dockerinstall | tee -a /var/log/ansible.log
                     else
