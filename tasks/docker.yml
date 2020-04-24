@@ -41,7 +41,7 @@
     - section_5: false
       # section_6: false
     - config_file: /etc/docker/daemon.json
-    - dockerd_via_network: false
+    - dockerd_via_network: true
       # Provide the following arguments if dockerd_via_network is true
       # Generate CA cert and CA Key and place it in the files directory
     - dockerd_ip: 0.0.0.0
@@ -63,7 +63,7 @@
     - syslog_address: ''
     - seccomp_profile: ''
     - authorization_plugins: []
-    - hardening: true
+    - hardening: false
 
   tasks:
     - name: Remove docker if installed from CentOS repo
