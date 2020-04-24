@@ -34,11 +34,11 @@
         "{{ lookup('env', 'docker_version') | default('18.09.9',true) }}"
     - docker_repo: 
         "{{ lookup('env', 'docker_yum_repo') | default('https://nexus.aocs-int.t-systems-service.com/repository/docker-ce',true) }}"
-    - section_1: true
-    - section_2: true
-    - section_3: true
-    - section_4: true
-    - section_5: true
+    - section_1: false
+    - section_2: false
+    - section_3: false
+    - section_4: false
+    - section_5: false
       # section_6: false
     - config_file: /etc/docker/daemon.json
     - dockerd_via_network: false
