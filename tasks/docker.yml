@@ -50,10 +50,10 @@
     - ca_key: ca-key.pem
     - ca_key_passphrase: changeme
     - host_ip: 0.0.0.0
-    - server_cert_path: /etc/docker/tls/server_certs
+    - server_cert_path: /etc/docker/certs.d/server_certs
     - server_cert: server-cert.pem
     - server_cert_key: server-key.pem
-    - client_cert_path: /etc/docker/tls/client_certs
+    - client_cert_path: /etc/docker/certs.d/client_certs
     - client_cert: cert.pem
     - client_cert_key: key.pem
     - default_ulimits_nofile_soft: 65536

@@ -31,3 +31,12 @@
       value: '262144'
       state: present
       reload: yes
+  - sysctl:
+      name: vm.panic_on_oom
+      value: '0'
+      state: present
+  - sysctl:
+      name: kernel.keys.root_maxbytes
+      value: '25000000'
+      state: present
+      reload: yes
