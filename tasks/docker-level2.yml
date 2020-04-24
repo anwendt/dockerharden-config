@@ -258,7 +258,6 @@
    - scored
    - section2.17
 
-# not set for rancher
 - name: "2.18 Ensure containers are restricted from acquiring new privileges (Scored)"
   jsonpatch: 
     file: "{{ config_file }}"

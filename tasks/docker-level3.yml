@@ -84,6 +84,14 @@
 #         "3.7 Ensure that registry certificate file ownership is set to root:root (Scored)"
 #         "3.8 Ensure that registry certificate file permissions are set to 444 or more restrictive (Scored)"
 
+- name: Create path for  certs which will be create by docker-machine 
+  file:
+    path: "{{ server_cert_path }}"
+    owner: root
+    group: root
+    mode: 0444
+    state: directory 
+
 - stat: path="{{ server_cert_path }}/{{ ca_cert }}"
   register: res
 
