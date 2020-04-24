@@ -260,11 +260,11 @@
 
 # not set for rancher
 - name: "2.18 Ensure containers are restricted from acquiring new privileges (Scored)"
- jsonpatch: 
-   file: "{{ config_file }}"
-   key: no-new-privileges
-   value: true
- notify: Reload docker
- tags:
-  - scored
-  - section2.18
+  jsonpatch: 
+    file: "{{ config_file }}"
+    key: no-new-privileges
+    value: true
+  notify: Reload docker
+  tags:
+   - scored
+   - section2.18
