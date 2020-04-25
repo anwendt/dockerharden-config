@@ -31,7 +31,7 @@
 - hosts: "localhost"
   vars:
     - docker_version:
-        "{{ lookup('env', 'docker_version') | default('18.09.9',true) }}"
+        "{{ lookup('env', 'docker_version') | default('19.03.8',true) }}"
     - docker_repo: 
         "{{ lookup('env', 'docker_yum_repo') | default('https://nexus.aocs-int.t-systems-service.com/repository/docker-ce',true) }}"
     - section_1: true
@@ -63,8 +63,7 @@
     - syslog_address: ''
     - seccomp_profile: ''
     - authorization_plugins: []
-    - hardening: true
-    - latest_version: true
+    - latest_version: false
 
   tasks:
     - name: Remove docker if installed from CentOS repo
@@ -113,19 +112,22 @@
         enabled: yes
     - name: Docker hardening level 1
       import_tasks: docker-level1.yml
-      when: hardening
+      when: section_1
     - name: Docker hardening level 2
       import_tasks: docker-level2.yml
-      when: hardening
+      when: section_2
     - name: Docker hardening level 3
       import_tasks: docker-level3.yml
-      when: hardening
+      when: section_3
     - name: Docker hardening level 4
       import_tasks: docker-level4.yml
-      when: hardening
+      when: section_4
     - name: Docker hardening level 5
       import_tasks: docker-level5.yml
-      when: hardening
+      when: section_5
+    - name: Docker hardening level 6
+      import_tasks: docker-level6.yml
+      when: section_5
   handlers:
   - name: Reload auditd Rules
     command: service auditd restart
