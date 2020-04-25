@@ -207,17 +207,8 @@
    - scored
    - section2.12
 
-# - name: "2.13 Ensure operations on legacy registry (v1) are Disabled (Scored)"
-#  jsonpatch: 
-#    file: "{{ config_file }}"
-#    key: disable-legacy-registry
-#    value: true
-#  notify: Reload docker
-#  tags:
-#   - scored
-#   - section2.13
 
-- name: "2.14 Ensure live restore is Enabled (Scored)"
+- name: "2.13 Ensure live restore is Enabled (Scored)"
   jsonpatch: 
     file: "{{ config_file }}"
     key: live-restore
@@ -225,9 +216,9 @@
   notify: Reload docker
   tags:
    - scored
-   - section2.14
+   - section2.13
 
-- name: "2.15 Ensure Userland Proxy is Disabled (Scored)"
+- name: "2.14 Ensure Userland Proxy is Disabled (Scored)"
   jsonpatch: 
     file: "{{ config_file }}"
     key: userland-proxy
@@ -235,9 +226,9 @@
   notify: Reload docker
   tags:
    - scored
-   - section2.15
+   - section2.14
 
-- name: "2.16 Ensure daemon-wide custom seccomp profile is applied, if needed (Not Scored)"
+- name: "2.15 Ensure daemon-wide custom seccomp profile is applied, if needed (Not Scored)"
   jsonpatch: 
     file: "{{ config_file }}"
     key: seccomp-profile
@@ -246,9 +237,9 @@
   notify: Reload docker
   tags:
    - scored
-   - section2.16
+   - section2.15
 
-- name: "2.17 Ensure experimental features are avoided in production (Scored)"
+- name: "2.16 Ensure experimental features are avoided in production (Scored)"
   jsonpatch: 
     file: "{{ config_file }}"
     key: experimental
@@ -256,9 +247,9 @@
   notify: Reload docker
   tags:
    - scored
-   - section2.17
+   - section2.16
 
-- name: "2.18 Ensure containers are restricted from acquiring new privileges (Scored)"
+- name: "2.17 Ensure containers are restricted from acquiring new privileges (Scored)"
   jsonpatch: 
     file: "{{ config_file }}"
     key: no-new-privileges
@@ -266,4 +257,4 @@
   notify: Reload docker
   tags:
    - scored
-   - section2.18
+   - section2.17

@@ -32,7 +32,7 @@
   jsonpatch: 
     file: "{{ config_file }}"
     key: selinux-enabled
-    value: false
+    value: true
   notify: Reload docker
   tags:
    - scored

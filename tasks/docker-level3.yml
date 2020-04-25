@@ -80,11 +80,9 @@
    - section3.6
 
 
-# - name: |
-#         "3.7 Ensure that registry certificate file ownership is set to root:root (Scored)"
-#         "3.8 Ensure that registry certificate file permissions are set to 444 or more restrictive (Scored)"
-
-- name: Create path for  certs which will be create by docker-machine 
+- name: |
+        "3.7 Ensure that registry certificate file ownership is set to root:root (Scored)"
+        "3.8 Ensure that registry certificate file permissions are set to 444 or more restrictive (Scored)"
   file:
     path: "{{ server_cert_path }}"
     owner: root
@@ -191,7 +189,7 @@
 
 - name: |
         "3.19 Ensure that /etc/default/docker file ownership is set to root:root (Scored)"
-        "3.20 Ensure that /etc/default/docker file permissions are set to 644 or more restrictive (Scored)"
+        "3.22 Ensure that the /etc/default/docker file permissions are set to 644 or more restrictively (Scored)"
   file:
     path: /etc/default/docker
     owner: root
@@ -202,4 +200,22 @@
   tags:
    - scored
    - section3.19
+   - section3.22
+
+
+- stat: path=/etc/sysconfig/docker
+  register: res
+- name: |
+        "3.20 Ensure that the /etc/sysconfig/docker file ownership is set to root:root (Scored)"
+        "3.21 Ensure that the /etc/sysconfig/docker file permissions are set to 644 or more restrictively (Scored)"
+  file:
+    path: /etc/sysconfig/docker
+    owner: root
+    group: root
+    mode: 0644
+    state: file
+  when: res.stat.exists == True
+  tags:
+   - scored
    - section3.20
+   - section3.21
