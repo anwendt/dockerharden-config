@@ -27,7 +27,7 @@
   yum:
     name: docker-ce
     state: latest
-  when: lastest_version
+  when: latest_version
   tags:
    - not_scored
    - section1.1
