@@ -27,9 +27,11 @@
   yum:
     name: docker-ce
     state: latest
+  when: lastest_version
   tags:
    - not_scored
-   - section1.3
+   - section1.1
+
 
 
 - name: 1.2.1 Ensure a separate partition for containers has been created (Scored)\

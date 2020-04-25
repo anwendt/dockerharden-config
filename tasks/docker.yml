@@ -64,6 +64,7 @@
     - seccomp_profile: ''
     - authorization_plugins: []
     - hardening: true
+    - latest_version: true
 
   tasks:
     - name: Remove docker if installed from CentOS repo
